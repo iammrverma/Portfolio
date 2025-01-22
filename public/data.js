@@ -1,13 +1,13 @@
 export const aboutData = {
   metaDescription:
-    "Welcome to Raj Verma's Portfolio! I am a passionate Front-end Developer with a strong focus on designing simple yet effective websites. Explore my diverse projects and works that showcase my skills in React.js, Tailwind CSS, and Figma. I believe in creativity, innovation, and user-centric design. Let's connect and collaborate on exciting projects.",
+    "Welcome to Raj Verma (iammrverma)'s Portfolio! I am a passionate Front-end Developer with a strong focus on designing simple yet effective websites. Explore my diverse projects and works that showcase my skills in React.js, Tailwind CSS, MUI, MongoDB, Nodejs and Figma. I believe in creativity, innovation, and user-centric design. Let's connect and collaborate on exciting projects.",
 
   quote: "Passion Fuels Purpose!",
 
   bio: [
-    "Hi, I'm Raj Verma, a web developer and UI/UX designer with a passion for creating beautiful, functional, and user-centered digital experiences. I am always looking for new and innovative ways to bring my clients' visions to life.",
+    "Hi, I'm Raj Verma digitally known as iammrverma, a web developer and UI/UX designer with a passion for creating beautiful, functional, and user-centered digital experiences. I am always looking for new and innovative ways to bring my clients' visions to life.",
     "I believe that design is about more than just making things look pretty. It's about solving problems and creating intuitive, enjoyable experiences for users.",
-    "Whether I'm working on a website, mobile app, or other digital product, I bring my commitment to design excellence and user-centered thinking to every project I work on. I look forward to the opportunity to bring my skills and passion to your next project.",
+    "Explore my projects or learn more about me by searching for 'iammrverma' on your favourite browser."
   ],
 
   satisfiedClients: 3,
