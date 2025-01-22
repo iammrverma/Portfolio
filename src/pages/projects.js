@@ -12,7 +12,7 @@ const projects = () => {
     <>
       <Head>
         <title>Raj Verma | Projects page</title>
-        <meta content="Explore Raj Verma's Portfolio Projects. Each project exemplifies My Web Development Skills, creativity, and dedication to delivering high-quality work. Discover a diverse range of projects, including [Reacct projects Pure html css js projects and many  more. Get inspired and see how I can bring your ideas to life." />
+        <meta content="Explore Raj Verma (iammrverma)'s Portfolio Projects. Each project exemplifies My Web Development Skills, creativity, and dedication to delivering high-quality work. Discover a diverse range of projects, including [React projects, Pure html css js projects, projects with backend, live projects and many more]. Get inspired and see how I can bring your ideas to life." />
       </Head>
       <TransitionEffect />
       <main className="w-full mb-16 flex flex-col items-center justify-center dark:text-light">
