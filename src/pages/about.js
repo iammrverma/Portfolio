@@ -86,7 +86,7 @@ const about = () => {
                 </span>
 
                 <h2 className="text-xl font-medium capitalize text-dark/75 dark:text-light/75 xl:text-center md:text-lg sm-text-base xs:tex-sm">
-                  Stisfied clients
+                  Satisfied clients
                 </h2>
               </div>
 
