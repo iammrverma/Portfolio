@@ -10,7 +10,7 @@ const Footer = () => {
         <div className="flex items-center lg:py-2">
           <Link href="/">iammrverma</Link>
         </div>
-        <Link href="mailto:rajbez2020@gmail.com" className="underline">
+        <Link href="mailto:rajwebz2020@gmail.com" className="underline">
           Contact Now
         </Link>
       </Layout>
