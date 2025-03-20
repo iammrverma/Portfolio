@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import { getFirestore, collection, getDocs, addDoc, serverTimestamp } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDT17V8DKY9CKoZCLB27T4xQMAxHyzypwk",
@@ -12,6 +13,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+export const auth = getAuth(app);
 
 const fetchProjects = async () => {
   try {
@@ -36,26 +38,43 @@ const createTimestamp = () => {
 };
 
 export const getProjects = async () => {
+  const startTime = performance.now(); // Start time
+
+  const cachedProjects = localStorage.getItem("projects");
   const storedTimestamp = localStorage.getItem("projectsTimestamp");
   const currentTimestamp = createTimestamp();
 
   // Check if cached data is still valid
-  if (storedTimestamp === currentTimestamp) {
-    const cachedProjects = localStorage.getItem("projects");
-    if (cachedProjects) {
-      console.log("Returning cached projects");
-      return JSON.parse(cachedProjects);
-    }
+  if (cachedProjects && storedTimestamp === currentTimestamp) {
+    const endTime = performance.now(); // End time
+    return {
+      projects: JSON.parse(cachedProjects),
+      source: "local",
+      time: (endTime - startTime).toFixed(2) + "ms",
+    };
   }
 
   // Fetch fresh data if timestamp doesn't match or data is missing
-  console.log("Fetching new projects from Firestore");
   const projects = await fetchProjects();
 
   // Update localStorage
   localStorage.setItem("projects", JSON.stringify(projects));
   localStorage.setItem("projectsTimestamp", currentTimestamp);
-
-  return projects;
+  
+  // return projects;
+  const endTime = performance.now(); // End time
+  return {projects, source: "cloud", time: (endTime - startTime).toFixed(2) + "ms"};
 };
 
+export const addProject = async (project) => {
+  const auth = getAuth();
+  console.log("Auth User Email Before Firestore Request:", auth.currentUser?.email);
+  console.log("Adding project to Firestore:", project);
+  
+  try {
+    const docRef = await addDoc(collection(db, "projects"), {...project, timestamp: serverTimestamp()});
+    console.log("Document written with ID: ", docRef.id);
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+};

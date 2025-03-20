@@ -98,6 +98,8 @@ export const ProjectCard = ({
           <FramerImage
             src={currImg}
             alt={title}
+            width={350}
+            height={200}
             className="w-auto h-full"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
@@ -111,6 +113,8 @@ export const ProjectCard = ({
               key={index}
               src={img}
               alt={index}
+              width={80}
+              height={50}
               style={{ objectFit: "contain" }}
               className={`w-[15%] h-full mx-2 rounded-sm border-solid border-dark border-[3px] ${
                 hoveredImg === img ? "opacity-50" : "opacity-100"

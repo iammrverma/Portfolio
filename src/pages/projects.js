@@ -1,13 +1,31 @@
 import AnimatedText from "@/components/AnimatedText";
 import Layout from "@/components/Layout";
 import Head from "next/head";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import TransitionEffect from "@/components/TransitionEffect";
 
-import { projectsData } from "../../public/data";
 import { ProjectCard } from "@/components/Card";
+import { getProjects } from "@/firebase";
 
 const projects = () => {
+  const [projects, setProjects] = useState([]);
+  const [source, setSource] = useState("");
+  const [time, setTime] = useState("");
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { projects, source, time } = await getProjects();
+        console.log(projects);
+        setProjects(projects);
+        setSource(source);
+        setTime(time);
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
   return (
     <>
       <Head>
@@ -21,22 +39,31 @@ const projects = () => {
             text="Imagination Trumps Knowledge!"
             className="mb-16 lg:!text-7xl sm:mb-8 sm:!text-6xl xs:!text-4xl"
           />
-
-          <div className="flex flex-col items-center justify-center">
-            {projectsData.map((project, index) => (
-              <div key={index} className="w-[60vw] mb-32 sm:w-[80vw] md:mb-24">
-                <ProjectCard
-                  title={project.title}
-                  images={project.images}
-                  summary={project.summary}
-                  link={project.link ? project.link : ""}
-                  githubLink={project.githubLink}
-                  skills={project.skills}
-                  isLive={project.link ? true : false}
-                />
+          {projects && time && source && projects.length > 0 && (
+            <>
+              <div className="flex flex-col items-center justify-center">
+                <h2 className="w-[60vw] mb-32 sm:w-[80vw] md:mb-24 mb-4 text-lg text-right text-dark/75 dark:text-light/75">
+                  {`From ${source} storage in ${time}`}
+                </h2>
+                {projects.map((project, index) => (
+                  <div
+                    key={index}
+                    className="w-[60vw] mb-32 sm:w-[80vw] md:mb-24"
+                  >
+                    <ProjectCard
+                      title={project.title}
+                      images={project.images}
+                      summary={project.summary}
+                      link={project.link ? project.link : ""}
+                      githubLink={project.githubLink}
+                      skills={project.skills}
+                      isLive={project.link ? true : false}
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </>
+          )}
         </Layout>
       </main>
     </>
