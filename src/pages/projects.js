@@ -42,7 +42,7 @@ const projects = () => {
           {projects && time && source && projects.length > 0 && (
             <>
               <div className="flex flex-col items-center justify-center">
-                <h2 className="w-[60vw] mb-32 sm:w-[80vw] md:mb-24 mb-4 text-lg text-right text-dark/75 dark:text-light/75">
+                <h2 className="w-[60vw] mb-4 sm:w-[80vw] text-lg text-right text-dark/75 dark:text-light/75">
                   {`From ${source} storage in ${time}`}
                 </h2>
                 {projects.map((project, index) => (

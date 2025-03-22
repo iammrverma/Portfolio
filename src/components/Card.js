@@ -133,7 +133,6 @@ export const ProjectCard = ({
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
             priority
-            sizes="(max-width:768px) 100vw, (max-width: 1200px) 50vw, 50vw"
           />
         </div>
         <div className="w-full h-[20%] flex absolute bottom-0 items-center justify-center p-1 dark:bg-light/0 backdrop-blur-[10px]">
