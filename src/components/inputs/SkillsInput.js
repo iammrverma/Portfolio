@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { Label } from "../Card";
+import { Delete } from "../Icons";
 
-const SkillsInput = ({skills, setSkills}) => {
+const SkillsInput = ({ skills, setSkills }) => {
   const [inputValue, setInputValue] = useState("");
 
   const handleKeyDown = (e) => {
@@ -16,29 +18,26 @@ const SkillsInput = ({skills, setSkills}) => {
   };
 
   return (
-    <div className="w-96 p-6 bg-gray-200 rounded-lg">
-      <h2 className="text-xl font-bold mb-4">Enter Your Skills</h2>
+    <div className="w-full p-6 flex flex-col gap-2 rounded-lg text-dark/75 dark:text-light/75 border">
+      <h2 className="text-lg font-bold">Enter Your Skills</h2>
+      <div className="flex flex-wrap gap-2 ">
+        {skills.map((skill, index) => (
+          <Label
+            key={index}
+            text={skill}
+            icon={<Delete width="16" height="16" />}
+            onIconClick={() => removeSkill(index)}
+          />
+        ))}
+      </div>
       <input
         type="text"
         placeholder="Press Enter to add skill"
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleKeyDown}
-        className="w-full p-2 mb-3 border rounded"
+        className="w-full p-2 border rounded text-dark"
       />
-      <div className="flex flex-wrap gap-2">
-        {skills.map((skill, index) => (
-          <div key={index} className="bg-blue-500 text-white px-3 py-1 rounded flex items-center">
-            {skill}
-            <button
-              onClick={() => removeSkill(index)}
-              className="ml-2 text-white bg-red-500 px-2 rounded"
-            >
-              x
-            </button>
-          </div>
-        ))}
-      </div>
     </div>
   );
 };

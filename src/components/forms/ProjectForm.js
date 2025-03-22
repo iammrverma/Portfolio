@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import SkillsInput from "../inputs/SkillsInput";
 import ImageInput from "../inputs/ImageInput";
 import { addProject } from "@/firebase";
+import { ButtonFill } from "../Card";
 
 const ProjectForm = () => {
   const [title, setTitle] = useState("");
@@ -12,63 +13,61 @@ const ProjectForm = () => {
   const [summary, setSummary] = useState("");
 
   return (
-    <>
-      <h2 className="mb-4 text-lg font-bold uppercase text-dark/75 dark:text-light/75">
-        Projects
-      </h2>
-      {/*title, githubLink, images, link, skills, summary */}
+    <div className="w-full flex flex-col gap-4">
       <input
         type="text"
         placeholder="Title"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         required
-        className="w-full p-2 mb-3 border rounded"
+        className="w-full p-2 border rounded"
       />
-      <input
-        type="text"
-        placeholder="GitHub Link"
-        value={githubLink}
-        onChange={(e) => setGithubLink(e.target.value)}
-        required
-        className="w-full p-2 mb-3 border rounded"
-      />
+      <div className="flex item-start justify-between gap-4 sm:flex-col">
+        <input
+          type="text"
+          placeholder="GitHub Link"
+          value={githubLink}
+          onChange={(e) => setGithubLink(e.target.value)}
+          required
+          className="w-full p-2 border rounded"
+        />
 
-      <ImageInput images={images} setImages={setImages} />
+        <input
+          type="text"
+          placeholder="Link"
+          value={link}
+          onChange={(e) => setLink(e.target.value)}
+          required
+          className="w-full p-2 border rounded"
+        />
+      </div>
 
-      <input
-        type="text"
-        placeholder="Link"
-        value={link}
-        onChange={(e) => setLink(e.target.value)}
-        required
-        className="w-full p-2 mb-3 border rounded"
-      />
-      <SkillsInput skills={skills} setSkills={setSkills} />
-      <input
-        type="text"
+      <textarea
         placeholder="Summary"
         value={summary}
         onChange={(e) => setSummary(e.target.value)}
         required
-        className="w-full p-2 mb-3 border rounded"
+        className="w-full p-2 border rounded resize-none h-24"
       />
-      <button
-        onClick={() =>{
-          addProject({ title, githubLink, images, link, skills, summary });
-          setGithubLink("");
-          setImages([]);
-          setLink("");
-          setSkills([]);
-          setSummary("");
-          setTitle("");
-        }
-        }
-        className="w-full p-2 bg-blue-500 text-white rounded"
-      >
-        Add Project
-      </button>
-    </>
+      <div className="flex item-start justify-between gap-4 sm:flex-col">
+        <SkillsInput skills={skills} setSkills={setSkills} />
+        <ImageInput images={images} setImages={setImages} />
+      </div>
+      <div className="flex justify-end">
+        <ButtonFill
+          text="Add Project"
+          onClick={() => {
+            addProject({ title, githubLink, images, link, skills, summary });
+            setGithubLink("");
+            setImages([]);
+            setLink("");
+            setSkills([]);
+            setSummary("");
+            setTitle("");
+          }}
+        />
+      </div>
+    </div>
   );
 };
 

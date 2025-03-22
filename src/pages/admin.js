@@ -7,6 +7,11 @@ import {
 import { auth } from "@/firebase";
 import LoginForm from "@/components/forms/LoginForm";
 import ProjectForm from "@/components/forms/ProjectForm";
+import Head from "next/head";
+import TransitionEffect from "@/components/TransitionEffect";
+import Layout from "@/components/Layout";
+import AnimatedText from "@/components/AnimatedText";
+import Card, { Accordian, ButtonFill, SideShadow } from "@/components/Card";
 
 const admin = () => {
   const [email, setEmail] = useState("");
@@ -48,28 +53,38 @@ const admin = () => {
     localStorage.removeItem("adminAuth");
   };
   return (
-    <div className="w-full min-h-screen flex flex-col items-center justify-center">
-      {!user ? (
-        <LoginForm
-          email={email}
-          password={password}
-          onLogin={handleLogin}
-          onEmailChange={setEmail}
-          onPasswordChange={setPassword}
-        />
-      ) : (
-        <>
-          <div>Admin</div>
-          <button
-            onClick={handleLogout}
-            className="p-2 bg-red-500 text-white rounded"
-          >
-            Log Out
-          </button>
-          <ProjectForm />
-        </>
-      )}
-    </div>
+    <>
+      <Head>
+        <title>Raj Verma | Admin panel</title>
+        <meta name="description" content={""} />
+      </Head>
+      {/* <TransitionEffect /> */}
+      <main className="flex w-full flex-col items-center justtify-center ">
+        <Layout className="pt-16">
+          {!user ? (
+            <LoginForm
+              email={email}
+              password={password}
+              onLogin={handleLogin}
+              onEmailChange={setEmail}
+              onPasswordChange={setPassword}
+            />
+          ) : (
+            <div className="flex flex-col gap-4">
+              <AnimatedText
+                text="Welcome Iammrverma"
+                className="mb-16 lg:!text-7xl sm:mb-8 sm:!text-6xl xs:!text-4xl"
+              />
+              <ButtonFill text="Log Out" onClick={handleLogout} />
+
+              <Accordian title="Add Project">
+                <ProjectForm />
+              </Accordian>
+            </div>
+          )}
+        </Layout>
+      </main>
+    </>
   );
 };
 

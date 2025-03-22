@@ -1,6 +1,12 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore, collection, getDocs, addDoc, serverTimestamp } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  addDoc,
+  serverTimestamp,
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDT17V8DKY9CKoZCLB27T4xQMAxHyzypwk",
@@ -60,21 +66,42 @@ export const getProjects = async () => {
   // Update localStorage
   localStorage.setItem("projects", JSON.stringify(projects));
   localStorage.setItem("projectsTimestamp", currentTimestamp);
-  
+
   // return projects;
   const endTime = performance.now(); // End time
-  return {projects, source: "cloud", time: (endTime - startTime).toFixed(2) + "ms"};
+  return {
+    projects,
+    source: "cloud",
+    time: (endTime - startTime).toFixed(2) + "ms",
+  };
 };
 
 export const addProject = async (project) => {
   const auth = getAuth();
-  console.log("Auth User Email Before Firestore Request:", auth.currentUser?.email);
-  console.log("Adding project to Firestore:", project);
-  
+  if (!auth.currentUser) {
+    console.error("User not logged in");
+    return null;
+  }
+  if (
+    !project.title ||
+    !project.summary ||
+    !project.skills ||
+    !Array.isArray(project.images)
+  ) {
+    console.error(
+      "Missing required fields: Ensure title, summary, skills, and attleast one image is provided"
+    );
+    return null;
+  }
   try {
-    const docRef = await addDoc(collection(db, "projects"), {...project, timestamp: serverTimestamp()});
+    const docRef = await addDoc(collection(db, "projects"), {
+      ...project,
+      timestamp: serverTimestamp(),
+    });
     console.log("Document written with ID: ", docRef.id);
+    return docRef.id; // Return the ID of the added document
   } catch (e) {
     console.error("Error adding document: ", e);
+    return null;
   }
 };

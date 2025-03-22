@@ -5,31 +5,46 @@ import Image from "next/image";
 import { GithubIcon } from "@/components/Icons";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 const FramerImage = motion(Image);
 
-const SideShadow = () => (
+export const SideShadow = () => (
   <div className="absolute top-0 -right-3 -z-10 w-[101%] h-[103%] rounded-[2.5rem] bg-dark dark:bg-light rounded-br-3xl xs:-right-2 sm:h-[102%] xs:w-full xs:rounded-[1.5rem]" />
 );
 
-const ButtonFill = ({ text, target, disabled }) => {
+export const ButtonFill = ({ text, target, disabled, onClick }) => {
+  const router = useRouter();
+  if (target) console.log(target);
+
   const handleClick = (event) => {
-    if (disabled) {
-      event.preventDefault(); // Prevent navigation
-    }
+    if (disabled) event.preventDefault();
+    if (onClick) return onClick();
+    // if (!target.startsWith("http")) {
+    //   event.preventDefault();
+    router.push(target);
+    // }
   };
 
-  return (
+  const buttonClasses = `rounded-lg p-2 px-6 text-lg font-semibold ${
+    disabled
+      ? "bg-gray-400 text-gray-700 cursor-not-allowed"
+      : "bg-dark dark:bg-light text-light dark:text-dark"
+  } sm:px-4 sm:text-base`;
+
+  return target?.startsWith("http") ? (
+    <a
+      href={target}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={buttonClasses}
+    >
+      {text}
+    </a>
+  ) : (
     <Link
-      href={disabled ? "#" : target}
-      target={disabled ? undefined : "_blank"}
-      className={`ml-4 rounded-lg p-2 px-6 text-lg font-semibold
-        ${
-          disabled
-            ? "bg-gray-400 text-gray-700 cursor-not-allowed"
-            : "bg-dark dark:bg-light text-light dark:text-dark"
-        }
-        sm:px-4 sm:text-base`}
+      href={target ? target : ""}
+      className={buttonClasses}
       onClick={handleClick}
     >
       {text}
@@ -37,22 +52,44 @@ const ButtonFill = ({ text, target, disabled }) => {
   );
 };
 
-const Card = ({ children, col }) => {
+const Card = ({ children, col, className }) => {
+  //TODO: Find and pass flex-col as className where ever col is given as an argument and remove col completely
   return (
     <article
       className={`w-full flex ${
         col ? "flex-col" : ""
-      } items-center justify-between relative rounded-br-2xl rounded-3xl border border-solid border-dark bg-light shadow-2xl p-6 dark:bg-dark dark:border-light lg:flex-col lg:p-8 xs:rounded-2xl xs:rounded-br-3xl xs:p-4`}
+      } items-center justify-between relative rounded-br-2xl rounded-3xl border border-solid border-dark bg-light shadow-2xl p-6 dark:bg-dark dark:border-light lg:flex-col lg:p-8 xs:rounded-2xl xs:rounded-br-3xl xs:p-4 ${className}`}
     >
+      {/* TODO: Find each instance of Card and pass SlideShadow={true} to render this shadow */}
       <SideShadow />
       {children}
     </article>
   );
 };
+export const Accordian = ({ title, children }) => {
+  const [isOpen, setIsOpen] = useState(false);
 
-const Label = ({ text }) => (
-  <div className="p-2 mt-2 mr-2 text-md sm:p-1 font-bold sm:m-1 sm:text-sm border-2 border-solid rounded-lg border-dark text-dark dark:border-light dark:text-light">
-    {text}
+  return (
+    <Card className="flex-col items-stretch">
+      <div className="w-full flex items-center justify-between">
+        <h2 className="text-lg font-bold text-dark/75 dark:text-light/75">
+          {title}
+        </h2>
+        <ButtonFill
+          text={isOpen ? "Close" : "Open"}
+          onClick={() => setIsOpen(!isOpen)}
+        />
+      </div>
+      {isOpen && <div className="my-4">{children}</div>}
+    </Card>
+  );
+};
+export const Label = ({ text, icon, onIconClick }) => (
+  <div className="p-2 text-md sm:p-1 font-bold sm:m-1 sm:text-sm border-2 border-solid rounded-lg border-dark text-dark dark:border-light dark:text-light flex gap-2 items-center">
+    {text}{" "}
+    <div className="cursor-pointer" onClick={onIconClick}>
+      {icon}
+    </div>
   </div>
 );
 

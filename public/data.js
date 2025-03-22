@@ -19,9 +19,9 @@ export const aboutData = {
       position: "Sr. IT Executive",
       company: "3T Logistics",
       link: "https://3tl.in",
-      time: "June 2024 - Present",
-      address: "Rajiv Nagar, Sector 13, 122001 India",
-      work: "Built several custom solutions and collaborated with the SEO and development team to enhance digital presence.",
+      time: "June 2024 - March 2025",
+      address: "Gurugram, Haryana - 122001 India",
+      work: "Built an EMS, several custom solutions and collaborated with the SEO and development team to enhance digital presence.",
     },
 
     {
@@ -29,7 +29,7 @@ export const aboutData = {
       company: "Webmistry",
       link: "https://askwebmistry.com",
       time: "June 2023 - July 2023",
-      address: "Krishna Colony, Palwal, 121102 India",
+      address: "Remote",
       work: "Worked as a junior front-end developer, converting designs into code. Collaborated with a creative team to enhance designs through innovative thinking and effective implementation. Designed and developed a user-centric landing page for the company.",
     },
   ],
