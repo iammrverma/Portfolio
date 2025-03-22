@@ -15,15 +15,11 @@ export const SideShadow = () => (
 
 export const ButtonFill = ({ text, target, disabled, onClick }) => {
   const router = useRouter();
-  if (target) console.log(target);
 
   const handleClick = (event) => {
     if (disabled) event.preventDefault();
     if (onClick) return onClick();
-    // if (!target.startsWith("http")) {
-    //   event.preventDefault();
     router.push(target);
-    // }
   };
 
   const buttonClasses = `rounded-lg p-2 px-6 text-lg font-semibold ${
@@ -52,16 +48,12 @@ export const ButtonFill = ({ text, target, disabled, onClick }) => {
   );
 };
 
-const Card = ({ children, col, className }) => {
-  //TODO: Find and pass flex-col as className where ever col is given as an argument and remove col completely
+const Card = ({ children, className, showShadow }) => {
   return (
     <article
-      className={`w-full flex ${
-        col ? "flex-col" : ""
-      } items-center justify-between relative rounded-br-2xl rounded-3xl border border-solid border-dark bg-light shadow-2xl p-6 dark:bg-dark dark:border-light lg:flex-col lg:p-8 xs:rounded-2xl xs:rounded-br-3xl xs:p-4 ${className}`}
+      className={`w-full flex items-center justify-between relative rounded-br-2xl rounded-3xl border border-solid border-dark bg-light shadow-2xl p-6 dark:bg-dark dark:border-light lg:flex-col lg:p-8 xs:rounded-2xl xs:rounded-br-3xl xs:p-4 ${className}`}
     >
-      {/* TODO: Find each instance of Card and pass SlideShadow={true} to render this shadow */}
-      <SideShadow />
+      {showShadow && <SideShadow />}
       {children}
     </article>
   );
@@ -70,7 +62,7 @@ export const Accordian = ({ title, children }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <Card className="flex-col items-stretch">
+    <Card className="flex-col items-stretch" showShadow={isOpen}>
       <div className="w-full flex items-center justify-between">
         <h2 className="text-lg font-bold text-dark/75 dark:text-light/75">
           {title}
@@ -112,7 +104,7 @@ export const ProjectCard = ({
   images,
   link,
   githubLink,
-  isLive = true,
+  isLive,
 }) => {
   const [currImg, setCurrImg] = useState(images[0]);
   const [hoveredImg, setHoveredImg] = useState(null);
@@ -129,7 +121,7 @@ export const ProjectCard = ({
   };
 
   return (
-    <Card>
+    <Card showShadow>
       <div className="w-1/2 cursor-pointer overflow-hidden rounded-lg lg:!w-full relative">
         <div key={currImg}>
           <FramerImage
@@ -166,7 +158,7 @@ export const ProjectCard = ({
 
       <div className="w-1/2 flex flex-col items-start justify-between pl-6 lg:w-full lg:pl-0 lg:pt-6">
         <Title text={title} target={link} />
-        <div className="flex flex-wrap items-center">
+        <div className="flex flex-wrap items-center gap-2">
           {skills.map((skill, index) => (
             <Label key={index} text={skill} />
           ))}
@@ -174,7 +166,7 @@ export const ProjectCard = ({
         <p className="my-2 font-medium text-dark/75 dark:text-light/75 sm:text-sm">
           {summary}
         </p>
-        <div className="mt-2 flex items-center ">
+        <div className="mt-2 flex items-center gap-2">
           <Link href={githubLink} target="_blank" className="w-10">
             <GithubIcon />
           </Link>
@@ -196,7 +188,7 @@ export const SaaSCard = ({
   isLive,
 }) => {
   return (
-    <Card col>
+    <Card showShadow className="flex-col">
       <div className="w-full cursur-pointer overflow-hidden rounded-lg lg:!w-full relative">
         {image && (
           <FramerImage
@@ -209,7 +201,7 @@ export const SaaSCard = ({
       </div>
       <div className="mt-6 flex flex-col items-start ">
         <Title text={title} target={link} />
-        <div className="flex flex-wrap items-center">
+        <div className="flex flex-wrap items-center gap-2">
           {tags.map((tag, index) => (
             <Label key={index} text={tag} />
           ))}
@@ -217,7 +209,7 @@ export const SaaSCard = ({
         <p className="my-4 font-medium text-dark/75 dark:text-light/75 sm:text-sm">
           {summary}
         </p>
-        <div className="mt-2 flex items-center ">
+        <div className="mt-2 flex items-center gap-2">
           <Link href={githubLink} target="_blank" className="w-10">
             <GithubIcon />
           </Link>
