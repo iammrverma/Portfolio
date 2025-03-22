@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Delete } from "../Icons";
 
-const ImageInput = ({ images, setImages }) => {
+const ImageInput = ({ images, setImages, max }) => {
   const [uploadingCount, setUploadingCount] = useState(0);
 
   const uploadImage = async (file) => {
@@ -28,7 +28,7 @@ const ImageInput = ({ images, setImages }) => {
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
-    if (file && images.length >= 4) return;
+    if (file && images.length >= max) return;
 
     const imageUrl = await uploadImage(file);
     if (imageUrl) {
@@ -46,7 +46,7 @@ const ImageInput = ({ images, setImages }) => {
       <h2 className="text-lg font-bold ">Upload Images</h2>
       <div className="flex flex-wrap gap-2">
         {/* Image Upload Button */}
-        {images.length < 4 && (
+        {images.length < max && (
           <label className="w-24 h-24 flex items-center justify-center border border-dashed border-gray-400 rounded-lg cursor-pointer">
             <span className="text-3xl text-gray-400">+</span>
             <input

@@ -178,11 +178,11 @@ export const ProjectCard = ({
   );
 };
 
-export const SaaSCard = ({
+export const SaasCard = ({
   image,
   title,
   link,
-  tags,
+  features,
   summary,
   githubLink = "https://github.com/iammrverma",
   isLive,
@@ -194,16 +194,18 @@ export const SaaSCard = ({
           <FramerImage
             src={image}
             alt={title}
+            width={350}
+            height={200}
             className="w-full h-[60vh] sm:h-[40vh]"
             priority
           />
         )}
       </div>
-      <div className="mt-6 flex flex-col items-start ">
+      <div className="mt-6 w-full flex flex-col items-start ">
         <Title text={title} target={link} />
         <div className="flex flex-wrap items-center gap-2">
-          {tags.map((tag, index) => (
-            <Label key={index} text={tag} />
+          {features.map((feature, index) => (
+            <Label key={index} text={feature} />
           ))}
         </div>
         <p className="my-4 font-medium text-dark/75 dark:text-light/75 sm:text-sm">

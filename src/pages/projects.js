@@ -1,11 +1,11 @@
+import React, { useState, useEffect } from "react";
+import { ProjectCard } from "@/components/Card";
+import { getProjects } from "@/firebase";
+
 import AnimatedText from "@/components/AnimatedText";
 import Layout from "@/components/Layout";
 import Head from "next/head";
-import React, { useState, useEffect } from "react";
 import TransitionEffect from "@/components/TransitionEffect";
-
-import { ProjectCard } from "@/components/Card";
-import { getProjects } from "@/firebase";
 
 const projects = () => {
   const [projects, setProjects] = useState([]);

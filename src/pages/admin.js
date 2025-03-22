@@ -5,13 +5,14 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import { auth } from "@/firebase";
+import { Accordian, ButtonFill } from "@/components/Card";
+
 import LoginForm from "@/components/forms/LoginForm";
 import ProjectForm from "@/components/forms/ProjectForm";
 import Head from "next/head";
-import TransitionEffect from "@/components/TransitionEffect";
 import Layout from "@/components/Layout";
 import AnimatedText from "@/components/AnimatedText";
-import Card, { Accordian, ButtonFill, SideShadow } from "@/components/Card";
+import SaasForm from "@/components/forms/SaasForm";
 
 const admin = () => {
   const [email, setEmail] = useState("");
@@ -58,7 +59,7 @@ const admin = () => {
         <title>Raj Verma | Admin panel</title>
         <meta name="description" content={""} />
       </Head>
-      {/* <TransitionEffect /> */}
+
       <main className="flex w-full flex-col items-center justtify-center ">
         <Layout className="pt-16">
           {!user ? (
@@ -79,6 +80,9 @@ const admin = () => {
 
               <Accordian title="Add Project">
                 <ProjectForm />
+              </Accordian>
+              <Accordian title="Add Saas">
+                <SaasForm />
               </Accordian>
             </div>
           )}

@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import { addProject } from "@/firebase";
+import { addSaas } from "@/firebase";
 import { ButtonFill } from "../Card";
 
 import ArrInput from "../inputs/ArrInput";
 import ImageInput from "../inputs/ImageInput";
 
-const ProjectForm = () => {
+const SaasForm = () => {
   const [title, setTitle] = useState("");
   const [githubLink, setGithubLink] = useState("");
-  const [images, setImages] = useState([]);
   const [link, setLink] = useState("");
-  const [skills, setSkills] = useState([]);
   const [summary, setSummary] = useState("");
+  const [images, setImages] = useState([]);
+  const [features, setFeatures] = useState([]);
 
   return (
     <div className="w-full flex flex-col gap-4">
@@ -51,18 +51,18 @@ const ProjectForm = () => {
         className="w-full p-2 border rounded resize-none h-24"
       />
       <div className="flex item-start justify-between gap-4 sm:flex-col">
-        <ArrInput arr={skills} setArr={setSkills} />
-        <ImageInput images={images} setImages={setImages} max={4} />
+        <ArrInput arr={features} setArr={setFeatures} />
+        <ImageInput images={images} setImages={setImages} max={1} />
       </div>
       <div className="flex justify-end">
         <ButtonFill
           text="Add Project"
           onClick={() => {
-            addProject({ title, githubLink, images, link, skills, summary });
+            addSaas({ title, githubLink, images, link, features, summary });
             setGithubLink("");
             setImages([]);
             setLink("");
-            setSkills([]);
+            setFeatures([]);
             setSummary("");
             setTitle("");
           }}
@@ -72,4 +72,4 @@ const ProjectForm = () => {
   );
 };
 
-export default ProjectForm;
+export default SaasForm;
