@@ -7,7 +7,7 @@ import Layout from "@/components/Layout";
 import Head from "next/head";
 import TransitionEffect from "@/components/TransitionEffect";
 
-const Projects = () => {
+const Projects = () => { 
   const [projects, setProjects] = useState([]);
   const [source, setSource] = useState("");
   const [time, setTime] = useState("");
