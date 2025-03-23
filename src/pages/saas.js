@@ -8,7 +8,7 @@ import TransitionEffect from "@/components/TransitionEffect";
 import Head from "next/head";
 
 
-const saas = () => {
+const Saas = () => {
   const [saas, setSaas] = useState([]);
   const [source, setSource] = useState("");
   const [time, setTime] = useState("");
@@ -71,4 +71,4 @@ const saas = () => {
   );
 };
 
-export default saas;
+export default Saas;

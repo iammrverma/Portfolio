@@ -14,7 +14,7 @@ import Layout from "@/components/Layout";
 import AnimatedText from "@/components/AnimatedText";
 import SaasForm from "@/components/forms/SaasForm";
 
-const admin = () => {
+const Admin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
@@ -92,4 +92,4 @@ const admin = () => {
   );
 };
 
-export default admin;
+export default Admin;

@@ -7,7 +7,7 @@ import Layout from "@/components/Layout";
 import Head from "next/head";
 import TransitionEffect from "@/components/TransitionEffect";
 
-const projects = () => {
+const Projects = () => {
   const [projects, setProjects] = useState([]);
   const [source, setSource] = useState("");
   const [time, setTime] = useState("");
@@ -70,4 +70,4 @@ const projects = () => {
   );
 };
 
-export default projects;
+export default Projects;
