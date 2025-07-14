@@ -245,8 +245,6 @@ const addArticleMeta = async (slug, articleMeta) => {
   await setDoc(docRef, {
     ...articleMeta,
     slug,
-    minRead: 0,
-    status: "draft",
     timestamp: serverTimestamp(),
   });
   return slug;
@@ -271,14 +269,12 @@ export const createArticle = async (articleMeta, content) => {
 
   if (
     !articleMeta.description ||
-    !articleMeta.imageUrl ||
-    !articleMeta.isFeatured ||
     !articleMeta.title ||
     !Array.isArray(articleMeta.tags) ||
     articleMeta.tags.length === 0 ||
     !content
   ) {
-    console.error("Missing required fields");
+    console.error("Missing required fields", articleMeta);
     return null;
   }
 
