@@ -1,16 +1,12 @@
-import Link from "next/link";
 import React, { useState } from "react";
-import Logo from "./Logo";
-import { motion } from "framer-motion";
 import { useRouter } from "next/router";
-import {
-  GithubIcon,
-  TwitterIcon,
-  LinkedInIcon,
-  SunIcon,
-  MoonIcon,
-} from "./Icons";
+import { motion } from "framer-motion";
+import Link from "next/link";
+
+import { GithubIcon, TwitterIcon, LinkedInIcon, SunIcon, MoonIcon, } from "./Icons";
 import useThemeSwitcher from "./hooks/useThemeSwitcher";
+import Logo from "./Logo";
+
 
 const CustomLink = ({ href, title, className = "" }) => {
   const router = useRouter();
@@ -91,6 +87,7 @@ const NavBar = () => {
           <CustomLink href="/projects" title={"Projects"} className="mx-4" />
           {/* <CustomLink href="/articles" title={"Articles"} className="mx-4" /> */}
           <CustomLink href="/saas" title={"SaaS"} className="mx-4" />
+          <CustomLink href="/digipin" title={"DigiPin"} className="mx-4" />
         </nav>
 
         <nav className="flex items-center justify-center flex-wrap">
@@ -159,6 +156,7 @@ bg-dark/90 dark:bg-light/75 rounded-lg backdrop-blur-md py-32"
             />
             {/* <CustomMobileLink href='/articles' title='Articles' toggle={handleClick}/> */}
             <CustomMobileLink href="/saas" title="SaaS" toggle={handleClick} />
+            <CustomMobileLink href="/digipin" title="DigiPin" toggle={handleClick} />
           </nav>
 
           <nav className="flex items-center justify-center flex-wrap mt-2">

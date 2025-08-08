@@ -1,12 +1,7 @@
+import { getFirestore, collection, getDocs, addDoc, serverTimestamp, } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  addDoc,
-  serverTimestamp,
-} from "firebase/firestore";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyDT17V8DKY9CKoZCLB27T4xQMAxHyzypwk",
@@ -186,3 +181,4 @@ export const addSaas = async (saas) => {
     return null;
   }
 };
+
