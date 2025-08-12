@@ -8,9 +8,6 @@ import Image from "next/image";
 import Link from "next/link";
 import Head from "next/head";
 
-import article2 from "../../public/images/articles/create loading screen in react js.jpg";
-import article1 from "../../public/images/articles/pagination component in reactjs.jpg";
-
 
 const FramerImage = motion(Image);
 
@@ -187,7 +184,7 @@ const articles = () => {
                       img={imageUrl}
                       title={title}
                       date={""}
-                      link={slug}
+                      link={"articles/"+slug}
                     />
                   );
                 })}

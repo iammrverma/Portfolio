@@ -54,6 +54,23 @@ const fetchSaas = async () => {
   }
 };
 
+const fetchArticle = async (slug) => {
+  try {
+    const docRef = doc(db, "articles", slug);
+    const articleSnap = await getDoc(docRef);
+
+    if (articleSnap.exists()) {
+      return { id: articleSnap.id, ...articleSnap.data() };
+    } else {
+      console.warn(`Article with slug "${slug}" not found.`);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching article:", error);
+    return null;
+  }
+};
+
 const fetchArticlesMeta = async () => {
   try {
     const querySnapshot = await getDocs(collection(db, "articlesMeta"));
@@ -75,6 +92,44 @@ const createTimestamp = () => {
   const month = date.toLocaleString("default", { month: "long" }); // Full month name
   const year = date.getFullYear();
   return `${day}${month}${year}`; // Example: 15March2025
+};
+
+export const fetchWithCache = async (
+  cacheKey,
+  fetchFn,
+  ttl = 5 * 60 * 1000
+) => {
+  try {
+    // 1. Check cache
+    // Only use localStorage in the browser
+    if (typeof window !== "undefined" && window.localStorage) {
+      const cachedData = localStorage.getItem(cacheKey);
+      if (cachedData) {
+        const { data, expiry } = JSON.parse(cachedData);
+        if (Date.now() < expiry) return { data, fromCache: true }; // Still valid
+      }
+    }
+
+    // 2. Fetch fresh data
+    const data = await fetchFn();
+
+    // 3. Store in cache with expiry
+    // Only use localStorage in the browser
+    if (typeof window !== "undefined" && window.localStorage) {
+      localStorage.setItem(
+        cacheKey,
+        JSON.stringify({
+          data,
+          expiry: Date.now() + ttl, // default 5 min
+        })
+      );
+    }
+
+    return { data, fromCache: false };
+  } catch (error) {
+    console.error(`Cache fetch error for ${cacheKey}:`, error);
+    return { data: null, expiry:null };
+  }
 };
 
 export const getProjects = async () => {
@@ -140,6 +195,24 @@ export const getSaas = async () => {
     saas,
     source: "cloud",
     time: (endTime - startTime).toFixed(2) + "ms",
+  };
+};
+
+export const getArticle = async (slug) => {
+  const startTime = performance.now(); //Start time
+  const { data, fromCache } = await fetchWithCache(
+    "article" + slug,
+    () => fetchArticle(slug),
+    24 * 60 * 60 * 1000
+  );
+  // Convert Firestore Timestamp → ISO string
+  if (data.timestamp && data.timestamp.toDate) {
+    data.timestamp = data.timestamp.toDate().toISOString();
+  }
+  return {
+    data,
+    source: fromCache ? "local" : "cloud",
+    time: (performance.now() - startTime).toFixed(2) + "ms",
   };
 };
 
@@ -212,7 +285,7 @@ export const addSaas = async (saas) => {
     console.error("User not logged in");
     return null;
   }
-  
+
   if (
     !saas.title ||
     !saas.summary ||
@@ -220,7 +293,7 @@ export const addSaas = async (saas) => {
     !Array.isArray(saas.images) ||
     !saas.images.length === 1 || // ensures that only one image is uploaded but in a array
     !Array.isArray(saas.features) ||
-    saas.features.length === 0 
+    saas.features.length === 0
   ) {
     console.error(
       "Missing required fields: Ensure title, summary, skills, image and link is provided"
