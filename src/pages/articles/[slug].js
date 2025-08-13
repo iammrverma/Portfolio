@@ -1,11 +1,11 @@
+import { getArticle, getArticlesMeta } from "@/firebase";
 import { useRouter } from "next/router";
-import { getArticle } from "@/firebase";
 import Head from "next/head";
 
 
-export default function ArticlePage({ article, source, time }) {
+export default function ArticlePage({ article, source, time, meta }) {
   const router = useRouter();
-
+  // TODO: Use Meta to render and style the article page.
   // Show loading state on fallback pages
   if (router.isFallback) {
     return <p>Loading...</p>;
@@ -66,8 +66,8 @@ export default function ArticlePage({ article, source, time }) {
 // SSR: runs at request time
 export async function getServerSideProps({ params }) {
   const { slug } = params;
-  console.log(slug);
   const { data: article, source, time } = await getArticle(slug);
+  const { data } = await getArticlesMeta(slug);
 
   if (!article) {
     return { notFound: true }; // Next.js will serve 404
@@ -78,6 +78,7 @@ export async function getServerSideProps({ params }) {
       article,
       source,
       time,
+      meta: data
     },
   };
 }

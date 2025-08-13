@@ -16,10 +16,10 @@ export const generateSlug = (title) => {
   return title
     .toLowerCase()
     .trim()
-    .replace(/[^\w\s-]/g, '')   // remove all special characters except hyphens and spaces
-    .replace(/\s+/g, '-')       // replace spaces with hyphens
-    .replace(/-+/g, '-')        // collapse multiple hyphens
-    .replace(/^-+|-+$/g, '');   // trim leading/trailing hyphens
+    .replace(/[^\w\s-]/g, "") // remove all special characters except hyphens and spaces
+    .replace(/\s+/g, "-") // replace spaces with hyphens
+    .replace(/-+/g, "-") // collapse multiple hyphens
+    .replace(/^-+|-+$/g, ""); // trim leading/trailing hyphens
 };
 
 const app = initializeApp(firebaseConfig);
@@ -71,7 +71,22 @@ const fetchArticle = async (slug) => {
   }
 };
 
-const fetchArticlesMeta = async () => {
+const fetchArticlesMeta = async (slug = "") => {
+  if (slug) {
+    try {
+      const docRef = doc(db, "articlesMeta", slug);
+      const articleMetaSnap = await getDoc(docRef);
+      if (articleMetaSnap.exists()) {
+        return { id: articleMetaSnap.id, ...articleMetaSnap.data() };
+      } else {
+        console.warn(`ArticleMeta with slug "${slug}" not found.`);
+        return null;
+      }
+    } catch (error) {
+      console.error("Error fetching articleMeta:", error);
+      return null;
+    }
+  }
   try {
     const querySnapshot = await getDocs(collection(db, "articlesMeta"));
     const articlesMeta = querySnapshot.docs.map((doc) => ({
@@ -128,7 +143,7 @@ export const fetchWithCache = async (
     return { data, fromCache: false };
   } catch (error) {
     console.error(`Cache fetch error for ${cacheKey}:`, error);
-    return { data: null, expiry:null };
+    return { data: null, expiry: null };
   }
 };
 
@@ -216,36 +231,22 @@ export const getArticle = async (slug) => {
   };
 };
 
-export const getArticlesMeta = async () => {
+export const getArticlesMeta = async (slug = "") => {
   const startTime = performance.now(); // Start time
-
-  const cachedArticlesMeta = localStorage.getItem("articlesMeta");
-  const storedTimestamp = localStorage.getItem("articlesMetaTimestamp");
-  const currentTimestamp = createTimestamp();
-
-  // Check if cached data is still valid
-  if (cachedArticlesMeta && storedTimestamp === currentTimestamp) {
-    const endTime = performance.now(); // End time
-    return {
-      articlesMeta: JSON.parse(cachedArticlesMeta),
-      source: "local",
-      time: (endTime - startTime).toFixed(2) + "ms",
-    };
+  const { data, fromCache } = await fetchWithCache(
+    "articlesMeta",
+    () => fetchArticlesMeta(slug),
+    60 * 60 * 1000
+  );
+  // Convert Firestore Timestamp → ISO string
+  if (data.timestamp && data.timestamp.toDate) {
+    data.timestamp = data.timestamp.toDate().toISOString();
   }
 
-  // Fetch fresh data if timestamp doesn't match or data is missing
-  const articlesMeta = await fetchArticlesMeta();
-
-  // Update localStorage
-  localStorage.setItem("articlesMeta", JSON.stringify(articlesMeta));
-  localStorage.setItem("articlesMetaTimestamp", currentTimestamp);
-
-  // return projects;
-  const endTime = performance.now(); // End time
   return {
-    articlesMeta,
-    source: "cloud",
-    time: (endTime - startTime).toFixed(2) + "ms",
+    data,
+    source: fromCache ? "local" : "cloud",
+    time: (performance.now() - startTime).toFixed(2) + "ms",
   };
 };
 
@@ -305,7 +306,6 @@ export const addSaas = async (saas) => {
       ...saas,
       timestamp: serverTimestamp(),
     });
-    console.log("Document written with ID: ", docRef.id);
     return docRef.id; // Return the ID of the added document
   } catch (e) {
     console.error("Error adding document: ", e);
@@ -369,7 +369,6 @@ export const createArticle = async (articleMeta, content) => {
   try {
     await addArticleMeta(finalSlug, articleMeta);
     await addArticle(finalSlug, content);
-    console.log("Article created with slug:", finalSlug);
     return finalSlug;
   } catch (e) {
     console.error("Error creating article:", e);

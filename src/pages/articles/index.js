@@ -112,8 +112,8 @@ const articles = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { articlesMeta, source, time } = await getArticlesMeta();
-        setArticlesMeta(articlesMeta);
+        const { data, source, time } = await getArticlesMeta();
+        setArticlesMeta(data);
         setSource(source);
         setTime(time);
       } catch (e) {
@@ -122,7 +122,7 @@ const articles = () => {
     };
     fetchData();
   }, []);
-  useEffect(() => console.log(articlesMeta), [articlesMeta]);
+
   return (
     <>
       <Head>
