@@ -1,17 +1,12 @@
-import AnimatedText from "@/components/AnimatedText";
-import Layout from "@/components/Layout";
 import { useMotionValue, useSpring, useInView } from "framer-motion";
-import Head from "next/head";
-import Image from "next/image";
 import React, { useEffect, useRef } from "react";
-
-import profilePic from "../../public/images/profile/self.png";
-import Skills from "@/components/Skills";
 import Experience from "@/components/Experience";
 import Education from "@/components/Education";
-import TransitionEffect from "@/components/TransitionEffect";
+import Image from "next/image";
+import Head from "next/head";
 
 import { aboutData } from "../../public/data";
+
 
 const AnimateNumber = ({ value }) => {
   const ref = useRef(null);
