@@ -33,7 +33,10 @@ export default function ArticlePage({ article, meta }) {
     <>
       <Head>
         <title>{title}</title>
-        <meta name="description" content={meta.description || ""} />
+        <meta
+          name="description"
+          content={meta.description || article.content.slice(0, 150)}
+        />
 
         {/* Open Graph */}
         <meta property="og:title" content={title} />
@@ -115,18 +118,20 @@ export default function ArticlePage({ article, meta }) {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "BlogPosting",
-            headline: title,
-            description: meta?.description,
-            image: meta?.imageUrl,
+            headline: meta.title,
+            description: meta.description || article.content.slice(0, 160),
+            image: meta.imageUrl,
             datePublished: new Date(article.timestamp).toISOString(),
-            author: {
-              "@type": "Person",
-              name: "iammrverma", // change if multi-author
-            },
+            author: { "@type": "Person", name: "iammrverma" },
             publisher: {
               "@type": "Organization",
               name: "iammrverma",
             },
+            mainEntityOfPage: {
+              "@type": "WebPage",
+              "@id": `https://iamrverma.tech/articles/${meta.slug}`,
+            },
+            keywords: meta.tags.join(", "),
           }),
         }}
       />

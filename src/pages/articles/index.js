@@ -108,10 +108,10 @@ const articles = ({ articlesMeta, source, time }) => {
   return (
     <>
       <Head>
-        <title>Raj Verma | Articles page</title>
+        <title>Articles By iammrverma</title>
         <meta
           name="description"
-          content="Discover a collection of insightful and informative articles on [Topic/Niche]. Raj Verma's articles cover a wide range of topics, including [Article/Topics]. Gain valuable knowledge, tips, and perspectives to stay informed and inspired. Whether you're a [Audience/Target Readers], there's something here to pique your interest. Explore the world of [Topic/Niche] through engaging and well-crafted articles."
+          content={`Read ${articlesMeta.length} insightful articles on web development, React, Tech, Firebase, and more. Updated regularly with fresh content by iammrverma.`}
         />
       </Head>
       <TransitionEffect />
@@ -166,7 +166,7 @@ const articles = ({ articlesMeta, source, time }) => {
                       img={imageUrl}
                       title={title}
                       date={""}
-                      link={"articles/"+slug}
+                      link={"articles/" + slug}
                     />
                   );
                 })}
@@ -175,6 +175,22 @@ const articles = ({ articlesMeta, source, time }) => {
           )}
         </Layout>
       </main>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            itemListElement: articlesMeta.map((meta, i) => ({
+              "@type": "ListItem",
+              position: i + 1,
+              url: `https://iamrverma.tech/articles/${meta.slug}`,
+              name: meta.title,
+            })),
+          }),
+        }}
+      />
     </>
   );
 };
