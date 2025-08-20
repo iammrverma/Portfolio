@@ -1,10 +1,15 @@
 import { useMotionValue, useSpring, useInView } from "framer-motion";
+import TransitionEffect from "@/components/TransitionEffect";
+import AnimatedText from "@/components/AnimatedText";
 import React, { useEffect, useRef } from "react";
 import Experience from "@/components/Experience";
 import Education from "@/components/Education";
+import Skills from "@/components/Skills";
+import Layout from "@/components/Layout";
 import Image from "next/image";
 import Head from "next/head";
 
+import profilePic from "../../public/images/profile/self.png";
 import { aboutData } from "../../public/data";
 
 
