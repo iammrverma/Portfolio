@@ -1,9 +1,9 @@
 import TransitionEffect from "@/components/TransitionEffect";
-import React, { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue } from "framer-motion";
 import AnimatedText from "@/components/AnimatedText";
 import { getArticlesMeta } from "@/firebase";
 import Layout from "@/components/Layout";
+import React, { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Head from "next/head";
@@ -41,7 +41,7 @@ const MovingImg = ({ title, img, link }) => {
           translateX: x,
           translateY: y,
         }}
-        className="absolute"
+        className="absolute z-20"
         ref={imgRef}
       >
         <Image
@@ -104,25 +104,7 @@ const FeaturedArticle = ({ img, title, time, summary, link }) => {
   );
 };
 
-const articles = () => {
-  const [articlesMeta, setArticlesMeta] = useState([]);
-  const [source, setSource] = useState("");
-  const [time, setTime] = useState("");
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data, source, time } = await getArticlesMeta();
-        setArticlesMeta(data);
-        setSource(source);
-        setTime(time);
-      } catch (e) {
-        console.log("Error fetching Articles Meta", e);
-      }
-    };
-    fetchData();
-  }, []);
-
+const articles = ({ articlesMeta, source, time }) => {
   return (
     <>
       <Head>
@@ -196,4 +178,15 @@ const articles = () => {
     </>
   );
 };
+
+export async function getServerSideProps() {
+  try {
+    const { data, source, time } = await getArticlesMeta();
+    return { props: { articlesMeta: data, source, time } };
+  } catch (e) {
+    console.log("Error fetching Articles Meta", e);
+    return { props: { articlesMeta: [], source: "", time: "" } };
+  }
+}
+
 export default articles;

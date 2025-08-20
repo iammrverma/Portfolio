@@ -72,12 +72,16 @@ const fetchArticle = async (slug) => {
 };
 
 const fetchArticlesMeta = async (slug = "") => {
+  const auth = getAuth(app); //plement firestore rule instead of client side filtering.
   if (slug) {
     try {
       const docRef = doc(db, "articlesMeta", slug);
       const articleMetaSnap = await getDoc(docRef);
       if (articleMetaSnap.exists()) {
-        return { id: articleMetaSnap.id, ...articleMetaSnap.data() };
+        const articleMeta = articleMetaSnap.data();
+        if (articleMeta.isPublished)
+          return { id: articleMetaSnap.id, ...articleMeta };
+        if (auth.currentUser) return { id: articleMetaSnap.id, ...articleMeta };
       } else {
         console.warn(`ArticleMeta with slug "${slug}" not found.`);
         return null;
@@ -93,7 +97,9 @@ const fetchArticlesMeta = async (slug = "") => {
       id: doc.id,
       ...doc.data(),
     }));
-    return articlesMeta;
+    return auth.currentUser
+      ? articlesMeta
+      : articlesMeta.filter((a) => a.isPublished);
   } catch (error) {
     console.log("Failed to fetch articlesMeta");
     console.log("Error getting documents: ", error);
@@ -238,13 +244,20 @@ export const getArticlesMeta = async (slug = "") => {
     () => fetchArticlesMeta(slug),
     60 * 60 * 1000
   );
-  // Convert Firestore Timestamp → ISO string
-  if (data.timestamp && data.timestamp.toDate) {
-    data.timestamp = data.timestamp.toDate().toISOString();
-  }
+
+  // Converting firestore timestamps to ISO strings
+  const normalizedData = Array.isArray(data)
+    ? data.map((item) =>
+        item.timestamp?.toDate
+          ? { ...item, timestamp: item.timestamp.toDate().toISOString() }
+          : item
+      )
+    : data?.timestamp?.toDate
+    ? { ...data, timestamp: data.timestamp.toDate().toISOString() }
+    : data;
 
   return {
-    data,
+    data: normalizedData,
     source: fromCache ? "local" : "cloud",
     time: (performance.now() - startTime).toFixed(2) + "ms",
   };
