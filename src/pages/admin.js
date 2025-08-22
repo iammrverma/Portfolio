@@ -1,18 +1,15 @@
-import { useState, useEffect } from "react";
-import {
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged,
-} from "firebase/auth";
-import { auth } from "@/firebase";
+import { signInWithEmailAndPassword, signOut, onAuthStateChanged, } from "firebase/auth";
 import { Accordian, ButtonFill } from "@/components/Card";
-
-import LoginForm from "@/components/forms/LoginForm";
 import ProjectForm from "@/components/forms/ProjectForm";
-import Head from "next/head";
-import Layout from "@/components/Layout";
+import LoginForm from "@/components/forms/LoginForm";
 import AnimatedText from "@/components/AnimatedText";
 import SaasForm from "@/components/forms/SaasForm";
+import BlogForm from "@/components/forms/BlogForm";
+import { useState, useEffect } from "react";
+import Layout from "@/components/Layout";
+import { auth } from "@/firebase";
+import Head from "next/head";
+
 
 const Admin = () => {
   const [email, setEmail] = useState("");
@@ -41,8 +38,6 @@ const Admin = () => {
         password
       );
       setUser(userCredential.user);
-      console.log("Login Successful", userCredential);
-      // localStorage.setItem("adminAuth", "true"); // Store login status
     } catch (error) {
       console.error("Login Failed:", error.message);
     }
@@ -83,6 +78,9 @@ const Admin = () => {
               </Accordian>
               <Accordian title="Add Saas">
                 <SaasForm />
+              </Accordian>
+              <Accordian title="Add Blog" >
+                <BlogForm />
               </Accordian>
             </div>
           )}

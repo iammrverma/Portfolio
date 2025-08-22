@@ -1,31 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { SaasCard } from "@/components/Card";
-import { getSaas } from "@/firebase";
-
-import AnimatedText from "@/components/AnimatedText";
-import Layout from "@/components/Layout";
 import TransitionEffect from "@/components/TransitionEffect";
+import AnimatedText from "@/components/AnimatedText";
+import { SaasCard } from "@/components/Card";
+import Layout from "@/components/Layout";
+import { getSaas } from "@/firebase";
 import Head from "next/head";
+import React from "react";
 
 
-const Saas = () => {
-  const [saas, setSaas] = useState([]);
-  const [source, setSource] = useState("");
-  const [time, setTime] = useState("");
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { saas, source, time } = await getSaas();
-        setSaas(saas);
-        setSource(source);
-        setTime(time);
-      } catch (error) {
-        console.error("Error fetching projects:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+const Saas = ({ saas, source, time }) => {
   return (
     <>
       <Head>
@@ -70,5 +52,15 @@ const Saas = () => {
     </>
   );
 };
+
+export async function getServerSideProps() {
+  try {
+    const { data, source, time } = await getSaas();
+    return { props: { saas: data, source, time } };
+  } catch (e) {
+    console.error("Error fetching saas", e);
+    return { props: { saas: [], source: "", time: "" } };
+  }
+}
 
 export default Saas;

@@ -1,31 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { ProjectCard } from "@/components/Card";
-import { getProjects } from "@/firebase";
-
-import AnimatedText from "@/components/AnimatedText";
-import Layout from "@/components/Layout";
-import Head from "next/head";
 import TransitionEffect from "@/components/TransitionEffect";
+import AnimatedText from "@/components/AnimatedText";
+import { ProjectCard } from "@/components/Card";
+import Layout from "@/components/Layout";
+import { getProjects } from "@/firebase";
+import Head from "next/head";
+import React from "react";
 
-const Projects = () => { 
-  const [projects, setProjects] = useState([]);
-  const [source, setSource] = useState("");
-  const [time, setTime] = useState("");
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { projects, source, time } = await getProjects();
-        console.log(projects);
-        setProjects(projects);
-        setSource(source);
-        setTime(time);
-      } catch (error) {
-        console.error("Error fetching projects:", error);
-      }
-    };
 
-    fetchData();
-  }, []);
+const Projects = ({ projects, source, time }) => {
   return (
     <>
       <Head>
@@ -69,5 +51,15 @@ const Projects = () => {
     </>
   );
 };
+
+export async function getServerSideProps() {
+  try {
+    const { data, source, time } = await getProjects();
+    return { props: { projects: data, source, time } };
+  } catch (e) {
+    console.error("Error fetching Projects", e);
+    return { props: { projects: [], source: "", time: "" } };
+  }
+}
 
 export default Projects;
